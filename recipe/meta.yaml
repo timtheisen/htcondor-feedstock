@@ -76,14 +76,14 @@ requirements:
   host:
     - krb5
     - libcurl
+    - libsqlite
     - libuuid  # [linux]
     - llvm-openmp  # [osx]
     - munge  # [linux]
     - openldap
     - openssl
     - pcre2
-    - scitokens-cpp >=0.5.0
-    - sqlite
+    - scitokens-cpp
 
 outputs:
   - name: htcondor-classads
@@ -149,20 +149,22 @@ outputs:
         - {{ pin_subpackage('htcondor-classads', exact=True) }}
         - krb5
         - libgomp  # [linux]
+        - libsqlite
         - libuuid  # [linux]
         - llvm-openmp  # [osx]
         - munge  # [linux]
         - openssl
         - pcre2
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
       run:
         - {{ pin_subpackage('htcondor-classads', exact=True) }}
         - krb5
+        - libsqlite
         - llvm-openmp  # [osx]
         - munge  # [linux]
         - openssl
         - pcre2
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
     files:
       - lib/libcondor_utils*
     test:
@@ -192,9 +194,10 @@ outputs:
         - {{ pin_subpackage("htcondor-classads", exact=True) }}
         - {{ pin_subpackage("libcondor_utils", exact=True) }}
         - libcurl
+        - libsqlite
         - libuuid  # [linux]
         - openssl
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
       run:
         - {{ pin_subpackage("htcondor-classads", exact=True) }}
         - {{ pin_subpackage("libcondor_utils", exact=True) }}
