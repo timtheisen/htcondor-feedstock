@@ -13,7 +13,7 @@ we don't need them for conda environments
  5 files changed, 44 deletions(-)
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index d99f77ef77..4f91b99cbb 100644
+index d99f77ef77..a5caaa5d20 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -18,32 +18,22 @@
@@ -60,7 +60,7 @@ index d99f77ef77..4f91b99cbb 100644
  add_subdirectory(condor_status.V6)
  add_subdirectory(condor_submit.V6)
  add_subdirectory(condor_sysapi)
-@@ -66,12 +53,9 @@ add_subdirectory(condor_tools)
+@@ -66,16 +53,12 @@ add_subdirectory(condor_tools)
  add_subdirectory(condor_unit_tests)
  add_subdirectory(condor_userlog)
  add_subdirectory(condor_utils)
@@ -73,6 +73,10 @@ index d99f77ef77..4f91b99cbb 100644
  add_subdirectory(gpu)
  add_subdirectory(python-bindings)
  add_subdirectory(rvgahp)
+-add_subdirectory(placementd)
+ 
+ #if (BUILD_TESTING AND NOT WINDOWS)
+ if (BUILD_TESTING)
 diff --git a/src/condor_procd/CMakeLists.txt b/src/condor_procd/CMakeLists.txt
 index b9de112230..dd49ba2fd2 100644
 --- a/src/condor_procd/CMakeLists.txt
