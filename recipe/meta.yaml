@@ -1,5 +1,5 @@
 {% set name = "htcondor" %}
-{% set version = "25.10.1" %}
+{% set version = "25.11.0" %}
 {% set major_version = version.split(".", maxsplit=1)[0] %}
 
 package:
@@ -12,7 +12,7 @@ package:
 
 source:
   url: https://htcss-downloads.chtc.wisc.edu/tarball/{{ major_version }}.x/{{ version }}/release/condor-{{ version }}-src.tar.gz
-  sha256: 73955afbc61fe5af8e77b370a2da0cd70cf6ce15b56efb212ef4248ba4a06558
+  sha256: e657ee7bdb75164d95aaae9c071f8bb2e7be8a5b65391c07ff4041913ce92735
   patches:
     # to update the patches for a new release:
     #
@@ -76,14 +76,14 @@ requirements:
   host:
     - krb5
     - libcurl
+    - libsqlite
     - libuuid  # [linux]
     - llvm-openmp  # [osx]
     - munge  # [linux]
     - openldap
     - openssl
     - pcre2
-    - scitokens-cpp >=0.5.0
-    - sqlite
+    - scitokens-cpp
 
 outputs:
   - name: htcondor-classads
@@ -149,20 +149,22 @@ outputs:
         - {{ pin_subpackage('htcondor-classads', exact=True) }}
         - krb5
         - libgomp  # [linux]
+        - libsqlite
         - libuuid  # [linux]
         - llvm-openmp  # [osx]
         - munge  # [linux]
         - openssl
         - pcre2
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
       run:
         - {{ pin_subpackage('htcondor-classads', exact=True) }}
         - krb5
+        - libsqlite
         - llvm-openmp  # [osx]
         - munge  # [linux]
         - openssl
         - pcre2
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
     files:
       - lib/libcondor_utils*
     test:
@@ -192,9 +194,10 @@ outputs:
         - {{ pin_subpackage("htcondor-classads", exact=True) }}
         - {{ pin_subpackage("libcondor_utils", exact=True) }}
         - libcurl
+        - libsqlite
         - libuuid  # [linux]
         - openssl
-        - scitokens-cpp >=0.5.0
+        - scitokens-cpp
       run:
         - {{ pin_subpackage("htcondor-classads", exact=True) }}
         - {{ pin_subpackage("libcondor_utils", exact=True) }}
