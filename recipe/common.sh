@@ -58,26 +58,26 @@ HTCONDOR_CMAKE_ARGS="
 # debug info, which is a significant size overhead.  Upstream expects the
 # packaging system to do the stripping ("package may strip the info").
 #
-# Reads a newline-separated list of paths on stdin and strips any that are
-# ELF/Mach-O binaries (other paths, e.g. scripts and data files, are left
-# untouched).  Uses the toolchain ${STRIP} so it also works when cross
-# compiling.
+# Reads a newline-separated list of paths on stdin and strips debug symbols
+# from each one.  We deliberately do not use `file` to detect binaries: it
+# is not installed in the conda-forge Linux build image, which would make
+# the detection silently match nothing.  Instead we let the toolchain
+# ${STRIP} reject non-object files (errors are ignored) and pick the strip
+# mode from the target platform.  Using ${STRIP} also keeps this correct
+# when cross compiling.
 condor_strip() {
   local _strip="${STRIP:-strip}"
+  local _stripopt
+  if [[ "${target_platform}" == osx-* ]]; then
+    # a full strip breaks Mach-O dylibs/bundles; -x keeps global symbols
+    _stripopt="-x"
+  else
+    # safe for both executables and shared objects; keeps dynamic symbols
+    _stripopt="--strip-unneeded"
+  fi
   local _file
   while IFS= read -r _file; do
     [ -f "${_file}" ] || continue
-    case "$(file -b "${_file}" 2>/dev/null)" in
-      *Mach-O*)
-        # a full strip breaks Mach-O dylibs/bundles; -x keeps global symbols
-        "${_strip}" -x "${_file}" || true
-        ;;
-      *ELF*executable*)
-        "${_strip}" "${_file}" || true
-        ;;
-      *ELF*shared*object*)
-        "${_strip}" --strip-unneeded "${_file}" || true
-        ;;
-    esac
+    "${_strip}" ${_stripopt} "${_file}" 2>/dev/null || true
   done
 }
