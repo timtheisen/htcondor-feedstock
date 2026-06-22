@@ -47,3 +47,37 @@ HTCONDOR_CMAKE_ARGS="
   -DWITH_VOMS:BOOL=FALSE
   -DWITH_PLACEMENT:BOOL=FALSE
 "
+
+# strip debug symbols from binaries listed on stdin.
+#
+# HTCondor's CMake unconditionally forces a RelWithDebInfo (-O2 -g3) build
+# regardless of the build type we request -- see the plain (non-cache)
+# set() calls in build/cmake/CondorConfigure.cmake, which shadow any
+# -DCMAKE_BUILD_TYPE we pass.  conda-build does not strip binaries itself,
+# so without this every shipped executable and library carries full -g3
+# debug info, which is a significant size overhead.  Upstream expects the
+# packaging system to do the stripping ("package may strip the info").
+#
+# Reads a newline-separated list of paths on stdin and strips debug symbols
+# from each one.  We deliberately do not use `file` to detect binaries: it
+# is not installed in the conda-forge Linux build image, which would make
+# the detection silently match nothing.  Instead we let the toolchain
+# ${STRIP} reject non-object files (errors are ignored) and pick the strip
+# mode from the target platform.  Using ${STRIP} also keeps this correct
+# when cross compiling.
+condor_strip() {
+  local _strip="${STRIP:-strip}"
+  local _stripopt
+  if [[ "${target_platform}" == osx-* ]]; then
+    # a full strip breaks Mach-O dylibs/bundles; -x keeps global symbols
+    _stripopt="-x"
+  else
+    # safe for both executables and shared objects; keeps dynamic symbols
+    _stripopt="--strip-unneeded"
+  fi
+  local _file
+  while IFS= read -r _file; do
+    [ -f "${_file}" ] || continue
+    "${_strip}" ${_stripopt} "${_file}" 2>/dev/null || true
+  done
+}
