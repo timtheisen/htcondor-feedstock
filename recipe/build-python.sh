@@ -32,3 +32,8 @@ cmake --build bindings/python --parallel ${CPU_COUNT} --verbose
 # install
 cmake --build src/python-bindings --parallel ${CPU_COUNT} --verbose --target install
 cmake --build bindings/python --parallel ${CPU_COUNT} --verbose --target install
+
+# strip debug symbols from the installed extension modules (see condor_strip
+# in common.sh); the bindings are built RelWithDebInfo (-g3) just like the
+# rest of HTCondor.
+find "${SP_DIR}" -type f -name "*.so" | condor_strip
