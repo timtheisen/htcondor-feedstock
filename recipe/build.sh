@@ -27,6 +27,13 @@ cmake --build . --parallel ${CPU_COUNT} --verbose
 # install
 cmake --build . --parallel ${CPU_COUNT} --verbose --target install
 
+# strip debug symbols from the binaries we just installed (see condor_strip
+# in common.sh).  Use the CMake install manifest so we only strip files that
+# HTCondor installed, not the host dependencies that also live in ${PREFIX}.
+if [ -f install_manifest.txt ]; then
+  condor_strip < install_manifest.txt
+fi
+
 # -- POST
 
 # move the man page for classads into the right directory
