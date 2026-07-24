@@ -1,4 +1,4 @@
-From 8e59878087bdd243472406a8e92864e23d072de0 Mon Sep 17 00:00:00 2001
+From 747ea0f5be69a039ac385a0fd3f4797c0b5e8329 Mon Sep 17 00:00:00 2001
 From: "duncan.macleod" <duncan.macleod@ligo.org>
 Date: Fri, 15 Jul 2022 18:19:10 +0100
 Subject: [PATCH 01/12] cmake: don't build daemons
@@ -13,15 +13,15 @@ we don't need them for conda environments
  5 files changed, 44 deletions(-)
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index d99f77ef77..a5caaa5d20 100644
+index 722f891751..482aa8ea21 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -18,32 +18,22 @@
  
  
  add_subdirectory(annex)
--add_subdirectory(archive_librarian)
 -add_subdirectory(arc_gahp)
+-add_subdirectory(archive_librarian)
 -add_subdirectory(azure_gahp)
  add_subdirectory(bash_completion.d)
  add_subdirectory(blahp)
@@ -60,7 +60,7 @@ index d99f77ef77..a5caaa5d20 100644
  add_subdirectory(condor_status.V6)
  add_subdirectory(condor_submit.V6)
  add_subdirectory(condor_sysapi)
-@@ -66,16 +53,12 @@ add_subdirectory(condor_tools)
+@@ -66,12 +53,9 @@ add_subdirectory(condor_tools)
  add_subdirectory(condor_unit_tests)
  add_subdirectory(condor_userlog)
  add_subdirectory(condor_utils)
@@ -71,12 +71,8 @@ index d99f77ef77..a5caaa5d20 100644
  add_subdirectory(gangliad)
 -add_subdirectory(gce_gahp)
  add_subdirectory(gpu)
+ add_subdirectory(placementd)
  add_subdirectory(python-bindings)
- add_subdirectory(rvgahp)
--add_subdirectory(placementd)
- 
- #if (BUILD_TESTING AND NOT WINDOWS)
- if (BUILD_TESTING)
 diff --git a/src/condor_procd/CMakeLists.txt b/src/condor_procd/CMakeLists.txt
 index b9de112230..dd49ba2fd2 100644
 --- a/src/condor_procd/CMakeLists.txt
@@ -100,10 +96,10 @@ index b9de112230..dd49ba2fd2 100644
  
  set( PROCD_CLIENT_UTIL_SRCS "${ProcClientElements}" PARENT_SCOPE )
 diff --git a/src/condor_schedd.V6/CMakeLists.txt b/src/condor_schedd.V6/CMakeLists.txt
-index fd012e93d1..e4a4fb5ec2 100644
+index 3086294fe9..821c568cc3 100644
 --- a/src/condor_schedd.V6/CMakeLists.txt
 +++ b/src/condor_schedd.V6/CMakeLists.txt
-@@ -50,7 +50,4 @@ schedd_stats.cpp
+@@ -51,7 +51,4 @@ schedd_stats.cpp
  transfer_queue.cpp
  )
  
@@ -133,7 +129,7 @@ index 0ddc4fc1f2..a8068c71a3 100644
  
      install ( FILES condor_qsub DESTINATION ${C_BIN} PERMISSIONS ${CONDOR_SCRIPT_PERMS} )
 diff --git a/src/condor_tools/CMakeLists.txt b/src/condor_tools/CMakeLists.txt
-index bc38b012f4..8c384652db 100644
+index e01432c49c..763e90b273 100644
 --- a/src/condor_tools/CMakeLists.txt
 +++ b/src/condor_tools/CMakeLists.txt
 @@ -20,13 +20,8 @@ condor_exe(condor_manifest "manifest.cpp" ${C_BIN} "${CONDOR_TOOL_LIBS}" OFF)
