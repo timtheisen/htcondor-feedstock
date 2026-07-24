@@ -22,6 +22,8 @@ krb5:
 - '1.22'
 libcurl:
 - '8'
+libsqlite:
+- '3'
 llvm_openmp:
 - '19'
 macos_machine:
@@ -44,8 +46,6 @@ python:
 - 3.14.* *_cp314
 python_impl:
 - cpython
-sqlite:
-- '3'
 target_platform:
 - osx-arm64
 zip_keys:
