@@ -1,4 +1,4 @@
-From 1d3eb762e58776bd7e65f41260ea2c14bec15d7c Mon Sep 17 00:00:00 2001
+From 9ad5202c471d76d0e6c96079dde16471d6e5ba89 Mon Sep 17 00:00:00 2001
 From: Duncan Macleod <duncan.macleod@ligo.org>
 Date: Fri, 14 Jan 2022 11:37:48 +0000
 Subject: [PATCH 07/12] osx: use pre-installed openssl libraries
